@@ -61,5 +61,17 @@ router.route("/:id/resources")
       res.status(500).send({ message: "Something went wrong." })
     })
 })
+.post((req, res) => {
+  const { id } = req.params;
+  const newResource = req.body;
+
+  projectsHelper.addResource(id, newResource)
+    .then(data => {
+      res.status(200).json(data)
+    })
+    .catch(err => {
+      res.status(500).json({ message: "Something went wrong." })
+    })
+})
 
 module.exports = router;

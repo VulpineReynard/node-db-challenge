@@ -8,7 +8,8 @@ module.exports = {
   remove,
   getTasks,
   addTask,
-  getResourcesById
+  getResourcesById,
+  addResource
 }
 
 function find() {
@@ -49,23 +50,33 @@ function getTasks(id) {
 
 
 function addTask(projectId, newTask) {
-  console.log(newTask)
   return db('tasks')
   .insert(newTask)
   .then(([id]) => {
-    return findTaskById(projectId);
+    return findTaskById(id)
+    .where({ id })
+    .first()
   });
 }
 
 function findTaskById(id) {
-  db('tasks')
+  return db('tasks')
     .where({ id })
     .first()
 }
 
 function getResourcesById(id) {
-  db('projects-resources as pr')
+  return db('projects-resources as pr')
     .select(['pr.description', 'r.name', 'pr.resource_id', 'pr.id as projects-resources'])
     .join('resources as r', 'pr.resource_id', 'r.id')
     .where({ project_id: id })
+}
+
+function addResource(projectId, newResource) {
+  return db('resources')
+    .insert(newResource)
+    .then(([id]) => {
+      db('projects-resources')
+        .insert({ project_id: projectId, resource_id: id })
+    })
 }
