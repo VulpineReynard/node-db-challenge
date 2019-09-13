@@ -76,7 +76,7 @@ function addResource(projectId, newResource) {
   return db('resources')
     .insert(newResource)
     .then(([id]) => {
-      db('projects-resources')
+      return db('projects-resources')
         .insert({ project_id: projectId, resource_id: id })
     })
 }

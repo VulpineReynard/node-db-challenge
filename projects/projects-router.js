@@ -67,6 +67,7 @@ router.route("/:id/resources")
 
   projectsHelper.addResource(id, newResource)
     .then(data => {
+      console.log(data, id, newResource)
       res.status(200).json(data)
     })
     .catch(err => {
